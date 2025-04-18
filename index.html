@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Kary Nitrex Familly</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      color: #2c3e50;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease;
+    }
+    .tier {
+      background: white;
+      margin-bottom: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: fadeUp 1s ease;
+    }
+    .tier-header {
+      background-color: #34495e;
+      color: white;
+      padding: 15px 25px;
+      font-size: 1.4em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      font-size: 1em;
+    }
+    th {
+      background-color: #ecf0f1;
+      color: #2c3e50;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 10px;
+    }
+    .total-box {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5em;
+      background: #dff9fb;
+      border: 2px solid #3498db;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Kary Nitrex Familly</h1>
+
+<div id="kary"></div>
+
+<div class="total-box">
+  Łączna kwota do zapłaty: <strong><span id="total">0</span>$</strong>
+</div>
+
+<script>
+  const data = [
+    {
+      tier: "TIER 1 – Drobne przewinienia",
+      cost: 5000,
+      items: [
+        "Brak aktywności przez 2 dni",
+        "Nieprzygotowanie do spotkania",
+        "Spóźnianie się na wydarzenia rodzinne",
+        "Złe nastawienie do innych",
+        "Ignorowanie wspólnych ustaleń",
+        "Niechęć do komunikacji",
+        "Nieobecność bez uprzedzenia",
+        "Opuszczenie zadania bez zgłoszenia"
+      ]
+    },
+    {
+      tier: "TIER 2 – Średnie przewinienia",
+      cost: 25000,
+      items: [
+        "Brak realizacji kontraktów",
+        "Ignorowanie decyzji zarządu",
+        "Nieodpowiednie wypowiedzi na czacie",
+        "Nieuzasadnione konflikty z członkami",
+        "Złe przechowywanie rzeczy we wspólnym magazynie",
+        "Brak zaangażowania w działania rodzinne",
+        "Nieoddanie pożyczonych przedmiotów",
+        "Zaniżanie reputacji rodziny"
+      ]
+    },
+    {
+      tier: "TIER 3 – Poważne przewinienia",
+      cost: 100000,
+      items: [
+        "Wynoszenie informacji poza rodzinę",
+        "Wynoszenie przedmiotów z magazynu bez zgody",
+        "Oszukiwanie zarządu",
+        "Świadome działanie na szkodę rodziny",
+        "Ukrywanie ważnych informacji",
+        "Współpraca z wrogimi grupami",
+        "Nieautoryzowane decyzje personalne",
+        "Podburzanie innych członków"
+      ]
+    },
+    {
+      tier: "TIER 4 – Krytyczne przewinienia",
+      cost: 250000,
+      items: [
+        "Długotrwała dezorganizacja rodziny",
+        "Zorganizowane działania podważające lidera",
+        "Zdrada z konkurencyjną rodziną",
+        "Powtarzające się łamanie zasad",
+        "Ukrywanie zysków rodzinnych",
+        "Tworzenie podziałów wewnątrz rodziny",
+        "Działania na pokaz kosztem reputacji rodziny",
+        "Próba przejęcia kontroli bez porozumienia"
+      ]
+    },
+    {
+      tier: "TIER 5 – Przewinienia do wyjaśnienia z liderem",
+      cost: 0,
+      items: [
+        "Zachowanie niepasujące do klimatu",
+        "Podejrzenie o nielojalność",
+        "Konflikt między wyższymi rangami",
+        "Niejasne działania z zewnętrznymi osobami",
+        "Wielokrotne złe decyzje osobiste",
+        "Nieprzewidywalność w działaniach",
+        "Problem z komunikacją",
+        "Ukrywanie kontaktów z obcymi grupami"
+      ]
+    }
+  ];
+
+  const container = document.getElementById("kary");
+  let total = 0;
+
+  function updateTotal() {
+    total = 0;
+    document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+      if (cb.checked) total += parseInt(cb.dataset.cost);
+    });
+    document.getElementById("total").innerText = total.toLocaleString();
+  }
+
+  data.forEach(tier => {
+    const tierBox = document.createElement("div");
+    tierBox.className = "tier";
+
+    const header = document.createElement("div");
+    header.className = "tier-header";
+    header.textContent = `${tier.tier} (${tier.cost > 0 ? tier.cost.toLocaleString() + "$" : "Do decyzji lidera"})`;
+
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th></th><th>Kara</th><th>Kwota</th></tr>";
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    tier.items.forEach(item => {
+      const row = document.createElement("tr");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.cost = tier.cost;
+      checkbox.addEventListener("change", updateTotal);
+
+      row.innerHTML = `<td></td><td>${item}</td><td>${tier.cost > 0 ? tier.cost.toLocaleString() + "$" : "Do decyzji"}</td>`;
+      row.cells[0].appendChild(checkbox);
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    tierBox.appendChild(header);
+    tierBox.appendChild(table);
+    container.appendChild(tierBox);
+  });
+</script>
+
+</body>
+</html>
